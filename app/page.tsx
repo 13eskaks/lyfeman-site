@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import 'github-markdown-css/github-markdown.css';
 import { Project } from './projects/Project';
 import { Project1 } from './projects/impl/project1/Project1';
 import { Project2 } from './projects/impl/project2/Project2';
-import { getProjectDescriptionHtml } from './utils/HTMLUtils';
 
 const projects = [new Project1(), new Project2()];
 const baseDescriptionPath = '/data/description/';
@@ -12,17 +13,19 @@ const baseDescriptionPath = '/data/description/';
 export default function Home() {
   const [active, setActive] = useState<Project | null>(null);
   const [input, setInput] = useState('');
-  const [result, setResult] = useState('');
-  const [descriptionHtml, setDescriptionHtml] = useState('');
+  const [result, setResult] = useState<any>(null);
+  const [descriptionMarkdown, setDescriptionMarkdown] = useState('');
 
   useEffect(() => {
     async function fetchDescription() {
       if (!active?.descriptionPath) return;
       try {
-        const html = await getProjectDescriptionHtml(`${baseDescriptionPath}${active.descriptionPath}`);
-        setDescriptionHtml(html);
+        const res = await fetch(`${baseDescriptionPath}${active.descriptionPath}`);
+        if (!res.ok) throw new Error('Error al cargar el archivo markdown');
+        const text = await res.text();
+        setDescriptionMarkdown(text);
       } catch (err) {
-        setDescriptionHtml('<p>Error al cargar la descripción.</p>');
+        setDescriptionMarkdown('Error al cargar la descripción.');
       }
     }
 
@@ -40,9 +43,9 @@ export default function Home() {
             className="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 cursor-pointer"
             onClick={() => {
               setActive(project);
-              setResult('');
+              setResult(null);
               setInput('');
-              setDescriptionHtml('');
+              setDescriptionMarkdown('');
             }}
           >
             <h2 className="text-xl font-semibold">{project.name}</h2>
@@ -55,10 +58,9 @@ export default function Home() {
         <div className="mt-10 bg-gray-800 p-6 rounded-xl">
           <h2 className="text-2xl font-bold mb-4">{active.name}</h2>
 
-          <div
-            className="prose prose-invert max-w-none mb-4"
-            dangerouslySetInnerHTML={{ __html: descriptionHtml }}
-          />
+          <div className="markdown-body prose prose-invert max-w-none mb-4 bg-gray-800 p-6 rounded-lg">
+            <ReactMarkdown>{descriptionMarkdown}</ReactMarkdown>
+          </div>
 
           <input
             type="text"
@@ -66,6 +68,15 @@ export default function Home() {
             placeholder="Introduce un valor..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={async (e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                if (active) {
+                  const output = await active.action(input);
+                  setResult(output);
+                }
+              }
+            }}
           />
 
           <button
@@ -75,10 +86,10 @@ export default function Home() {
             }}
             className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
           >
-            Ejecutar acción
+            Pruebalo!
           </button>
 
-          {result && <div className="mt-4 p-4 bg-gray-700 rounded">{result}</div>}
+          {result && <div className="mt-4 p-4 bg-gray-700 rounded">{active.renderResult(result)}</div>}
         </div>
       )}
     </main>

@@ -1,0 +1,19 @@
+# ✨ Restaurant Review Sentiment API ✨
+
+¿Quieres descubrir al instante si una opinión sobre un restaurante es buena, mala o simplemente neutra? Esta API lo hace por ti, con un toque de inteligencia artificial que analiza las reseñas y te regala una puntuación en estrellas, ¡como un crítico gourmet digital!
+
+---
+
+## 🚀 ¿Cómo usarlo?
+
+1. Escribe tu opinión sincera sobre el restaurante que quieras.
+2. Pulsa el botón **"¡Pruébalo!"** o presiona **Enter** para que la magia comience.
+3. ¡Voilà! Aparecerá:
+   - El texto que has escrito, analizado con cuidado.
+   - Una puntuación en estrellas para que veas la valoración clara y rápida.
+   - Un desglose en porcentaje: cuánto hay de positivo, negativo y neutral.
+   - La fecha exacta en la que se realizó el análisis.
+
+---
+
+¿Listo para darle voz a tus reseñas y descubrir su verdadero sentimiento? ¡Vamos allá!
