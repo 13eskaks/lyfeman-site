@@ -58,13 +58,15 @@ export default function Home() {
         <div className="mt-10 bg-gray-800 p-6 rounded-xl">
           <h2 className="text-2xl font-bold mb-4">{active.name}</h2>
 
-          <div className="markdown-body prose prose-invert max-w-none mb-4 bg-gray-800 p-6 rounded-lg">
-            <ReactMarkdown>{descriptionMarkdown}</ReactMarkdown>
+          <div style={{ marginBottom: '1rem' }}>
+            <div className="markdown-body prose prose-invert max-w-none bg-gray-800 p-6 rounded-lg">
+              <ReactMarkdown>{descriptionMarkdown}</ReactMarkdown>
+            </div>
           </div>
 
           <input
             type="text"
-            className="w-full p-2 rounded bg-gray-700 text-white mb-4"
+            className="w-full p-2 rounded bg-gray-700 text-white mt-4 mb-4"
             placeholder="Introduce un valor..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -89,7 +91,9 @@ export default function Home() {
             Pruebalo!
           </button>
 
-          {result && <div className="mt-4 p-4 bg-gray-700 rounded">{active.renderResult(result)}</div>}
+          {result && (
+            <div className="mt-4 p-4 bg-gray-700 rounded">{active.renderResult(result)}</div>
+          )}
         </div>
       )}
     </main>

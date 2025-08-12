@@ -1,5 +1,7 @@
 # ✨ Restaurant Review Sentiment API ✨
 
+Este proyecto utiliza un modelo BERT multilingüe entrenado para regresión de sentimientos con tres salidas (positivo, negativo y neutral). El modelo procesa reseñas en español de España y Argentina, tokenizadas y balanceadas mediante oversampling, con una capa de dropout antes de predecir la distribución de sentimientos. El entrenamiento se realizó optimizando la predicción con Adam sobre más de 18,000 datos, lo que permite analizar con precisión opiniones en ambos países.
+
 ¿Quieres descubrir al instante si una opinión sobre un restaurante es buena, mala o simplemente neutra? Esta API lo hace por ti, con un toque de inteligencia artificial que analiza las reseñas y te regala una puntuación en estrellas, ¡como un crítico gourmet digital!
 
 ---
