@@ -5,16 +5,21 @@ import ReactMarkdown from 'react-markdown';
 import 'github-markdown-css/github-markdown.css';
 import { Project } from './projects/Project';
 import { Project1 } from './projects/impl/project1/Project1';
-import { Project2 } from './projects/impl/project2/Project2';
+// import { Project2 } from './projects/impl/project2/Project2';
 
-const projects = [new Project1(), new Project2()];
+const projects = [
+  new Project1(),
+  // , new Project2()
+];
 const baseDescriptionPath = '/data/description/';
 
-export default function Home() {
+export default function Home1() {
   const [active, setActive] = useState<Project | null>(null);
   const [input, setInput] = useState('');
   const [result, setResult] = useState<any>(null);
   const [descriptionMarkdown, setDescriptionMarkdown] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [serverStarting, setServerStarting] = useState(false);
 
   useEffect(() => {
     async function fetchDescription() {
@@ -31,6 +36,28 @@ export default function Home() {
 
     fetchDescription();
   }, [active]);
+
+  const handleAction = async () => {
+    if (!active) return;
+
+    setResult(null);
+    setLoading(true);
+    setServerStarting(false);
+
+    // Si pasan 5s sin respuesta, mostramos mensaje de "levantando servidor"
+    const timer = setTimeout(() => {
+      setServerStarting(true);
+    }, 5000);
+
+    try {
+      const output = await active.action(input);
+      setResult(output);
+    } finally {
+      clearTimeout(timer);
+      setLoading(false);
+      setServerStarting(false);
+    }
+  };
 
   return (
     <main className="p-10">
@@ -73,25 +100,27 @@ export default function Home() {
             onKeyDown={async (e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                if (active) {
-                  const output = await active.action(input);
-                  setResult(output);
-                }
+                await handleAction();
               }
             }}
           />
 
           <button
-            onClick={async () => {
-              const output = await active.action(input);
-              setResult(output);
-            }}
+            onClick={handleAction}
             className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
           >
             Pruebalo!
           </button>
 
-          {result && (
+          {loading && (
+            <div className="mt-4 p-4 bg-yellow-600 text-black rounded">
+              {serverStarting
+                ? 'El servidor se está iniciando, puede tardar unos minutos...'
+                : 'Procesando...'}
+            </div>
+          )}
+
+          {!loading && result && (
             <div className="mt-4 p-4 bg-gray-700 rounded">{active.renderResult(result)}</div>
           )}
         </div>
