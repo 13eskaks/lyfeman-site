@@ -20,21 +20,6 @@ export default function Home1() {
   const [descriptionMarkdown, setDescriptionMarkdown] = useState('');
   const [loading, setLoading] = useState(false);
   const [serverStarting, setServerStarting] = useState(false);
-
- useEffect(() => {
-    const existingScript = document.querySelector(
-      'script[src*="adsbygoogle.js"]'
-    );
-
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src =
-        'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5145520648111228';
-      script.crossOrigin = 'anonymous';
-      document.head.appendChild(script);
-    }
-  }, []);
   
   useEffect(() => {
     async function fetchDescription() {
