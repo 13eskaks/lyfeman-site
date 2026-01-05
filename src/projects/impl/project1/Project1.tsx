@@ -1,4 +1,4 @@
-import { apiRawClient } from '../../../lib/apiClient';
+import { apiRawClient } from '@/lib/apiClient';
 import { Project } from '../../Project';
 import React from 'react';
 import { Project1Result } from './Project1Result';
